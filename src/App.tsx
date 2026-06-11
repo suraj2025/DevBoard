@@ -1,21 +1,26 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { lazy, Suspense } from 'react'
 import { useAuthStore } from './store/authStore'
+import AppLayout from './layout/AppLayout'
 import LoginPage from './pages/login'
 
-// Placeholder — we'll replace this next step
-function DashboardPage() {
-  const { user, logout } = useAuthStore()
-  return (
-    <div className="p-8">
-      <h1 className="text-xl font-semibold">Welcome, {user?.name}</h1>
-      <button onClick={logout} className="mt-4 text-sm text-red-500">Logout</button>
-    </div>
-  )
-}
+const DashboardPage = lazy(() => import('./pages/DashboardPage'))
+const TasksPage     = lazy(() => import('./pages/Taskpage'))
+const HabitsPage    = lazy(() => import('./pages/HabitsPage'))
+const ReportsPage   = lazy(() => import('./pages/ReportPage'))
+const SettingsPage  = lazy(() => import('./pages/SettingsPage'))
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
   return isAuthenticated ? <>{children}</> : <Navigate to="/login" replace />
+}
+
+function PageLoader() {
+  return (
+    <div className="flex items-center justify-center h-48 text-gray-400 text-sm">
+      Loading...
+    </div>
+  )
 }
 
 export default function App() {
@@ -24,13 +29,18 @@ export default function App() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route
-          path="/dashboard"
           element={
             <ProtectedRoute>
-              <DashboardPage />
+              <AppLayout />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route path="/dashboard" element={<Suspense fallback={<PageLoader />}><DashboardPage /></Suspense>} />
+          <Route path="/tasks"     element={<Suspense fallback={<PageLoader />}><TasksPage /></Suspense>} />
+          <Route path="/habits"    element={<Suspense fallback={<PageLoader />}><HabitsPage /></Suspense>} />
+          <Route path="/reports"   element={<Suspense fallback={<PageLoader />}><ReportsPage /></Suspense>} />
+          <Route path="/settings"  element={<Suspense fallback={<PageLoader />}><SettingsPage /></Suspense>} />
+        </Route>
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>

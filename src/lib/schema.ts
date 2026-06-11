@@ -6,3 +6,12 @@ export const loginSchema = z.object({
 })
 
 export type LoginFormData = z.infer<typeof loginSchema>
+
+export const taskSchema = z.object({
+  title: z.string().min(1, 'Title is required').max(100, 'Too long'),
+  description: z.string().max(300, 'Too long').optional(),
+  priority: z.enum(['low', 'medium', 'high']),
+  status: z.enum(['todo', 'in_progress', 'done']),
+})
+
+export type TaskFormData = z.infer<typeof taskSchema>
