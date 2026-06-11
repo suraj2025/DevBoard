@@ -28,7 +28,7 @@ function getWeeklyProgress(habit: Habit): number {
 
 const habitSchema = z.object({
   name: z.string().min(1, 'Name is required').max(60),
-  description: z.string().max(200).optional().default(''),
+  description: z.string().max(200),
 })
 type HabitFormData = z.infer<typeof habitSchema>
 

@@ -3,7 +3,7 @@ import { http, HttpResponse } from 'msw'
 export type Task = {
   id: string
   title: string
-  description: string
+  description?: string
   status: 'todo' | 'in_progress' | 'done'
   priority: 'low' | 'medium' | 'high'
   createdAt: string

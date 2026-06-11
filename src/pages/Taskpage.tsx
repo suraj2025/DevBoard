@@ -16,7 +16,7 @@ const columns: { key: Task['status']; label: string; bg: string; headerBg: strin
   { key: 'done',        label: 'Done',        bg: 'bg-green-50',  headerBg: 'bg-green-50' },
 ]
 
-type MenuState = { taskId: string; x: number; y: number } | null
+// type MenuState = { taskId: string; x: number; y: number } | null
 
 function TaskCard({
   task,

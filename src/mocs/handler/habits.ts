@@ -17,7 +17,7 @@ const habits: Habit[] = [
 export const habitHandlers = [
   http.get('/api/habits', () => HttpResponse.json(habits)),
 
-  http.post('/api/habits/:id/toggle', ({ params, request: req }) => {
+  http.post('/api/habits/:id/toggle', ({ params}) => {
     const habit = habits.find(h => h.id === params.id)
     if (!habit) return HttpResponse.json({ message: 'Not found' }, { status: 404 })
 
