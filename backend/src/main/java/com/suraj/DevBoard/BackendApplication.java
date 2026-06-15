@@ -1,4 +1,4 @@
-package com.suraj.backend;
+package com.suraj.DevBoard;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
