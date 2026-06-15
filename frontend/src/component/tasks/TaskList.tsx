@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { fetchTasks, deleteTask, updateTask } from '../../api/tasks'
 import TaskCard from './TaskCard'
-import type { Task } from '../../mocs/handler/task'
+import type { Task } from '../../types'
 
 export default function TaskList() {
   const queryClient = useQueryClient()
@@ -23,7 +23,7 @@ export default function TaskList() {
 
   // ---- useMutation: update status ----
   const updateMutation = useMutation({
-    mutationFn: ({ id, data }: { id: string; data: Partial<Task> }) =>
+    mutationFn: ({ id, data }: { id: number; data: Partial<Task> }) =>
       updateTask(id, data),
 
     // Optimistic update — update UI instantly, roll back if server fails

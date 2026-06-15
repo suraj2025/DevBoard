@@ -1,4 +1,4 @@
-import type { Habit } from '../../mocs/handler/habits'
+import type { Habit } from "../../types"
 
 // Every possible thing that can happen in this UI
 export type HabitAction =

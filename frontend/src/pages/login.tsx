@@ -3,12 +3,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { loginSchema, type LoginFormData } from '../lib/schema'
-import { useAuthStore } from '../store/authStore' 
+import { useAuthStore } from '../store/authStore'
+import { login } from '../api/auth'
 
 export default function LoginPage() {
   const [serverError, setServerError] = useState('')
   const [loading, setLoading] = useState(false)
-  const login = useAuthStore((state) => state.login)
+  const setAuth = useAuthStore((state) => state.login)
   const navigate = useNavigate()
 
   const {
@@ -24,26 +25,15 @@ export default function LoginPage() {
     setServerError('')
 
     try {
-      const res = await fetch('/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      })
-
-      if (!res.ok) {
-        const err = await res.json()
-        setServerError(err.message)
-        return
-      }
-
-      const { user, token } = await res.json()
-      login(user, token)
+      const { user, token } = await login(data)
+      setAuth(user, token)
       navigate('/dashboard')
+    } catch (err) {
+      setServerError((err as Error).message)
     } finally {
       setLoading(false)
     }
   }
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 w-full max-w-sm">

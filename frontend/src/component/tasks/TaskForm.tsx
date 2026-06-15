@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { taskSchema, type TaskFormData } from '../../lib/schema'
 import { createTask, updateTask } from '../../api/tasks'
-import type { Task } from '../../mocs/handler/task'
+import type { Task } from '../../types'
 
 type Props = {
   onClose: () => void
@@ -14,10 +14,23 @@ export default function TaskForm({ onClose, editingTask }: Props) {
   const queryClient = useQueryClient()
   const isEditing = !!editingTask
 
-  const { register, handleSubmit, formState: { errors } } = useForm<TaskFormData>({
-    resolver: zodResolver(taskSchema),
-    defaultValues: editingTask ?? { priority: 'medium', status: 'todo' },
-  })
+const { register, handleSubmit, formState: { errors } } = useForm<TaskFormData>({
+  resolver: zodResolver(taskSchema) as any,
+  defaultValues: editingTask
+    ? {
+        title: editingTask.title,
+        description: editingTask.description ?? '',
+        priority: editingTask.priority,
+        status: editingTask.status,
+        dueDate: editingTask.dueDate ?? '',
+      }
+    : {
+        description: '',
+        priority: 'medium' as const,
+        status: 'todo' as const,
+        dueDate: '',
+      },
+})
 
   const mutation = useMutation({
     mutationFn: (data: TaskFormData) =>
@@ -85,6 +98,13 @@ export default function TaskForm({ onClose, editingTask }: Props) {
           {mutation.isError && (
             <p className="text-red-500 text-sm">{(mutation.error as Error).message}</p>
           )}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Due Date (Optional)</label>
+              <input type='date'
+              {...register('dueDate')}
+              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            </div>
 
           <div className="flex gap-3 pt-1">
             <button type="button" onClick={onClose}

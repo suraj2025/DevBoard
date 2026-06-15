@@ -13,21 +13,8 @@ const queryClient = new QueryClient({
   },
 })
 
-async function enableMocking() {
-  if (import.meta.env.DEV) {
-    const { worker } = await import('./mocs/browser')
-    return  worker.start({
-  onUnhandledRequest(request, print) {
-    // only warn for /api/* requests, ignore everything else
-    if (request.url.includes('/api/')) {
-      print.warning()
-    }
-  },
-})
-  }
-}
 
-enableMocking().then(() => {
+
   createRoot(document.getElementById('root')!).render(
     <StrictMode>
       <QueryClientProvider client={queryClient}>
@@ -35,4 +22,3 @@ enableMocking().then(() => {
       </QueryClientProvider>
     </StrictMode>,
   )
-})

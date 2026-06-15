@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { fetchTasks, deleteTask, updateTask } from '../api/tasks'
-import type { Task } from '../mocs/handler/task'
+import type { Task } from '../types'
 import TaskForm from '../component/tasks/TaskForm'
 
 const priorityStyles: Record<Task['priority'], string> = {
@@ -25,9 +25,9 @@ function TaskCard({
   onStatusChange,
 }: {
   task: Task
-  onDelete: (id: string) => void
+  onDelete: (id: number) => void
   onEdit: (task: Task) => void
-  onStatusChange: (id: string, status: Task['status']) => void
+  onStatusChange: (id: number, status: Task['status']) => void
 }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)
@@ -145,7 +145,7 @@ export default function TasksPage() {
   })
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, data }: { id: string; data: Partial<Task> }) => updateTask(id, data),
+    mutationFn: ({ id, data }: { id: number; data: Partial<Task> }) => updateTask(id, data),
     onMutate: async ({ id, data }) => {
       await queryClient.cancelQueries({ queryKey: ['tasks'] })
       const previous = queryClient.getQueryData<Task[]>(['tasks'])

@@ -2,8 +2,8 @@ import { useReducer, useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import { habitReducer, initialHabitState, getStreak } from '../component/habits/habitReducer'
-import { fetchHabits, toggleHabit, createHabit } from '../api/habbit'
-import type { Habit } from '../mocs/handler/habits'
+import { fetchHabits, toggleHabit, createHabit, deleteHabit } from '../api/habbit'
+import type { Habit } from '../types'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -128,17 +128,14 @@ function HabitCard({ habit }: { habit: Habit }) {
     },
   })
 
-  const deleteMutation = useMutation({
-    mutationFn: async () => {
-      const res = await fetch(`/api/habits/${habit.id}`, { method: 'DELETE' })
-      if (!res.ok) throw new Error('Failed to delete')
-    },
-    onSuccess: () => {
-      queryClient.setQueryData(['habits'], (old: Habit[]) =>
-        old.filter(h => h.id !== habit.id)
-      )
-    },
-  })
+const deleteMutation = useMutation({
+  mutationFn: () => deleteHabit(habit.id),
+  onSuccess: () => {
+    queryClient.setQueryData(['habits'], (old: Habit[]) =>
+      old.filter(h => h.id !== habit.id)
+    )
+  },
+})
 
   return (
     <>

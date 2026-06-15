@@ -1,4 +1,4 @@
-import type { Task } from '../../mocs/handler/task'
+import type { Task } from "../../types"
 
 const priorityStyles = {
   high:   'bg-red-100 text-red-700',
@@ -14,8 +14,8 @@ const statusStyles = {
 
 type Props = {
   task: Task
-  onDelete: (id: string) => void
-  onStatusChange: (id: string, status: Task['status']) => void
+  onDelete: (id: number) => void
+  onStatusChange: (id: number, status: Task['status']) => void
 }
 
 export default function TaskCard({ task, onDelete, onStatusChange }: Props) {
