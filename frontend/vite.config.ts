@@ -10,7 +10,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:8080',
+        target: 'https://devboard-backend-aa30.onrender.com',
         changeOrigin: true,
       },
     },

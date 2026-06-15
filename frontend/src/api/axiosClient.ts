@@ -2,13 +2,12 @@ import axios from 'axios'
 import { useAuthStore } from '../store/authStore'
 
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_API_URL || '/api',
   headers: {
     'Content-Type': 'application/json',
   },
 })
 
-// Attach JWT token to every request automatically
 api.interceptors.request.use((config) => {
   const token = useAuthStore.getState().token
   if (token) {
@@ -17,7 +16,6 @@ api.interceptors.request.use((config) => {
   return config
 })
 
-// Global error handling — auto-logout on 401
 api.interceptors.response.use(
   (response) => response,
   (error) => {
