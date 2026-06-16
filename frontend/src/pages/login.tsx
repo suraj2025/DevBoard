@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from 'react-router-dom'
-import { loginSchema, registerSchema, type LoginFormData, type RegisterFormData } from '../lib/schemas'
+import { loginSchema, registerSchema, type LoginFormData, type RegisterFormData } from '../lib/schema'
 import { useAuthStore } from '../store/authStore'
 import { login, register } from '../api/auth'
 
