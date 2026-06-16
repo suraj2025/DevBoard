@@ -83,10 +83,6 @@ export default function LoginPage() {
             {loading ? 'Signing in...' : 'Sign in'}
           </button>
         </form>
-
-        <p className="text-xs text-gray-400 text-center mt-4">
-          Use dev@devboard.com / password123
-        </p>
       </div>
     </div>
   )
